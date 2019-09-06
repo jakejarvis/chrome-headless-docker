@@ -1,6 +1,5 @@
-FROM debian:stable-slim
+FROM node:lts-slim
 
-LABEL version="1.0.0"
 LABEL repository="https://github.com/jakejarvis/chrome-headless-docker"
 LABEL homepage="https://jarv.is/"
 LABEL maintainer="Jake Jarvis <jake@jarv.is>"
@@ -9,14 +8,14 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Install and upgrade required utilities
 RUN apt-get update -qqy && \
-    apt-get install -qqy gnupg2 libnss3 libnss3-tools libfontconfig1 wget ca-certificates apt-transport-https inotify-tools && \
+    apt-get install -qqy --no-install-recommends gnupg2 wget ca-certificates apt-transport-https && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 # Install latest Chrome stable
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' && \
     apt-get update -qqy && \
-    apt-get install -qqy google-chrome-stable --no-install-recommends && \
+    apt-get install -qqy --no-install-recommends google-chrome-stable && \
     rm /etc/apt/sources.list.d/google-chrome.list && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
